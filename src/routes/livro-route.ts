@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {addLivro, findAll, findLivro} from "../controller/livro";
+import {validateAuth} from "../middleware/auth";
 
 const router = Router();
 
@@ -20,12 +21,26 @@ const router = Router();
  *                     type: string
  *                     description: nome do livro
  *                 autor:
- *                     type: string
+ *                     type: array
+ *                     items:
+ *                         type: string
  *                     description: nome do autor do livro
  *             example:
- *                 id: fgdsg43
- *                 titulo: tit do livro
- *                 autor: Leee
+ *                 id: 1f40d986-380a-41ae-845f-0b63c0c5bb56
+ *                 titulo: Programador Pragmático
+ *                 autor: ['Andy Hunt','Dave Thomas']
+ *     securitySchemes:
+ *         bearerAuth:
+ *             type: http
+ *             scheme: bearer
+ *             bearerFormat: JWT
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Livros
+ *     description: API de gerenciamente de Livros
  */
 
 /**
@@ -34,14 +49,17 @@ const router = Router();
  *      get:
  *          summary: Retorna todos os livros da lista
  *          tags: [Livros]
+ *          security: [{"bearerAuth": []}]
  *          description: Send a message to the server and get a response added to the original text.
  *          responses:
+ *              401:
+ *                  description: Unauthorized
  *              404:
  *                  description: Not found
  *              500:
  *                  description: Internal server error
  */
-router.get("/livro", findAll)
+router.get("/livro", validateAuth, findAll)
 
 /**
  * @swagger
@@ -78,8 +96,16 @@ router.get("/livro/:id", findLivro)
  *             content:
  *                 application/json:
  *                     schema:
- *                         $ref: '#/components/schemas/Livro'
-
+ *                         type: object
+ *                         properties:
+ *                             titulo:
+ *                                 type: string
+ *                                 description: nome do livro
+ *                             autor:
+ *                                 type: array
+ *                                 items:
+ *                                     type: string
+ *                                 description: nome do autor do livro
  *         responses:
  *             201:
  *                 description: Livro Criado com sucesso

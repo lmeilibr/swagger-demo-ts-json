@@ -2,12 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addLivro = exports.findLivro = exports.findAll = void 0;
 const uuid_1 = require("uuid");
-let uuidv4 = (0, uuid_1.v4)();
 let livros = [
     {
-        id: "1",
-        titulo: "t1",
-        autor: 'aut1',
+        id: "1f40d986-380a-41ae-845f-0b63c0c5bb56",
+        titulo: "Programador Pragmático",
+        autor: ['Andy Hunt', 'Dave Thomas'],
     }
 ];
 const findAll = (req, res) => {

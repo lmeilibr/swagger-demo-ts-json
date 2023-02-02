@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.livroRouter = void 0;
 const express_1 = require("express");
 const livro_1 = require("../controller/livro");
+const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 exports.livroRouter = router;
 /**
@@ -22,12 +23,25 @@ exports.livroRouter = router;
  *                     type: string
  *                     description: nome do livro
  *                 autor:
- *                     type: string
+ *                     type: array
+ *                     items:
+ *                         type: string
  *                     description: nome do autor do livro
  *             example:
- *                 id: fgdsg43
- *                 titulo: tit do livro
- *                 autor: Leee
+ *                 id: 1f40d986-380a-41ae-845f-0b63c0c5bb56
+ *                 titulo: Programador Pragmático
+ *                 autor: ['Andy Hunt','Dave Thomas']
+ *     securitySchemes:
+ *         bearerAuth:
+ *             type: http
+ *             scheme: bearer
+ *             bearerFormat: JWT
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: Livros
+ *     description: API de gerenciamente de Livros
  */
 /**
  * @swagger
@@ -35,14 +49,17 @@ exports.livroRouter = router;
  *      get:
  *          summary: Retorna todos os livros da lista
  *          tags: [Livros]
+ *          security: [{"bearerAuth": []}]
  *          description: Send a message to the server and get a response added to the original text.
  *          responses:
+ *              401:
+ *                  description: Unauthorized
  *              404:
  *                  description: Not found
  *              500:
  *                  description: Internal server error
  */
-router.get("/livro", livro_1.findAll);
+router.get("/livro", auth_1.validateAuth, livro_1.findAll);
 /**
  * @swagger
  * /livro/{id}:
@@ -76,8 +93,16 @@ router.get("/livro/:id", livro_1.findLivro);
  *             content:
  *                 application/json:
  *                     schema:
- *                         $ref: '#/components/schemas/Livro'
-
+ *                         type: object
+ *                         properties:
+ *                             titulo:
+ *                                 type: string
+ *                                 description: nome do livro
+ *                             autor:
+ *                                 type: array
+ *                                 items:
+ *                                     type: string
+ *                                 description: nome do autor do livro
  *         responses:
  *             201:
  *                 description: Livro Criado com sucesso

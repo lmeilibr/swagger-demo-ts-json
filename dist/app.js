@@ -13,15 +13,28 @@ const options = {
     definition: {
         openapi: "3.0.1",
         info: {
-            title: "Documentação Swagger para API REST de Livros",
+            title: "API REST de Livros",
             version: "1.0.0",
+            description: "Documentação Swagger para API REST de Livros",
+            contact: {
+                name: "Leandro Meili",
+                email: "leandro@example.com"
+            }
         },
         schemes: ["http"],
-        servers: [{ url: "http://localhost:3000/v1" }],
+        servers: [
+            {
+                url: "http://localhost:3000/v1",
+                description: "Dev Server"
+            },
+            {
+                url: "http://api.host.prod.com:3007/v1",
+                description: "Prod Server"
+            }
+        ],
     },
     apis: [
-        `${__dirname}/routes/livro-route.ts`,
-        "./dist/routes/livro-route.js",
+        "./dist/routes/*.js",
     ],
 };
 const swaggerSpec = (0, swagger_jsdoc_1.default)(options);
